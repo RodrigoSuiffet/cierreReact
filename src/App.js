@@ -76,11 +76,11 @@ function App() {
           method: 'GET',
           mode: "no-cors",
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'text/html',
             'x-api-key':'IuXHFkVrYw7MCzWLbeGHY99BhkUuG8qf3dqudyPb',
             'Origin':'https://master.dalzpx6jadfbw.amplifyapp.com',
             'Access-Control-Request-Method': 'GET',
-            "accept": "application/json"
+            "accept": "text/html"
           },
         });
         
