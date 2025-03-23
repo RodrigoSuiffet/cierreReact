@@ -79,10 +79,11 @@ function App() {
             'x-api-key':'IuXHFkVrYw7MCzWLbeGHY99BhkUuG8qf3dqudyPb'
           },
         });
-        
+        /*
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
+          */
         
         const data = await response.json();
         setInitialValue(data);
