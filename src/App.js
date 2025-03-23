@@ -76,7 +76,9 @@ function App() {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key':'IuXHFkVrYw7MCzWLbeGHY99BhkUuG8qf3dqudyPb'
+            'x-api-key':'IuXHFkVrYw7MCzWLbeGHY99BhkUuG8qf3dqudyPb',
+            'Origin':'https://master.dalzpx6jadfbw.amplifyapp.com',
+            'Access-Control-Request-Method': 'GET'
           },
         });
         
