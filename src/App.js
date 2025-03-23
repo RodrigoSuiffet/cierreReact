@@ -74,6 +74,7 @@ function App() {
         // Realizar la petición GET al endpoint especificado
         const response = await fetch(`https://g9qfs3qh7k.execute-api.eu-west-3.amazonaws.com/inicial/${shift}`, {
           method: 'GET',
+          mode: "no-cors",
           headers: {
             'Content-Type': 'application/json',
             'x-api-key':'IuXHFkVrYw7MCzWLbeGHY99BhkUuG8qf3dqudyPb',
