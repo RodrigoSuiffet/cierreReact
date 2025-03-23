@@ -72,7 +72,7 @@ function App() {
     const fetchInitialData = async () => {
       try {
         // Realizar la petición GET al endpoint especificado
-        const response = await fetch(`http://cierreserver-env.eba-mcybzbzw.eu-west-3.elasticbeanstalk.com/inicial/${shift}`);
+        const response = await fetch(`https://g9qfs3qh7k.execute-api.eu-west-3.amazonaws.com/inicial/${shift}`);
         
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
