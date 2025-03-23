@@ -1,0 +1,550 @@
+/* App.css */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  border: 2px solid #333;
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
+
+/* Header Section */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+.shift-selector {
+  display: flex;
+  align-items: center;
+}
+
+.shift-selector label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.shift-selector select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+.datetime {
+  text-align: right;
+}
+
+.date {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Tab Navigation */
+.tabs {
+  display: flex;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #ccc;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  border-right: 1px solid #ccc;
+  font-weight: bold;
+}
+
+.tab:last-child {
+  border-right: none;
+}
+
+.tab.active {
+  background-color: #8CFF99;
+  color: #333;
+}
+
+.tab.error {
+  position: relative;
+}
+
+.tab.error::after {
+  content: "!";
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 16px;
+  height: 16px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+/* Content Section */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 15px;
+  background-color: white;
+}
+
+/* Responsive Layout for Desktop */
+@media (min-width: 769px) {
+  .app-container {
+    min-height: auto;
+    height: 80vh;
+    margin: 20px auto;
+  }
+  
+  /* Horizontal layout for sections in desktop */
+  .recuento-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .count-mode-selector {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .coin-count-section, .total-count-section {
+    width: 100%;
+  }
+  
+  .coin-grid, .bill-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .gastos-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .expenses-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+  }
+  
+  .cierre-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+}
+
+/* Recuento (Count) Section */
+.count-mode-selector {
+  display: flex;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.mode-option {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+}
+
+.mode-option.active {
+  background-color: #8CFF99;
+  font-weight: bold;
+}
+
+.coin-count-section h3 {
+  margin: 15px 0 10px;
+}
+
+.coin-grid, .bill-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.coin-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #f9f9f9;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.coin-value {
+  width: 40px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.coin-row input {
+  width: 70px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.coin-total {
+  width: 70px;
+  text-align: right;
+  background-color: #e6f7ff;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #bde0fe;
+}
+
+@media (max-width: 768px) {
+  .coin-row input, .coin-total {
+    width: 60px;
+  }
+}
+
+.total-count-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.total-count-section label {
+  font-weight: bold;
+}
+
+.total-count-section input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Gastos (Expenses) Section */
+.withdrawal-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.withdrawal-section label {
+  font-weight: bold;
+  width: 80px;
+}
+
+.withdrawal-section input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.expenses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.expense-item {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+.expense-header {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.expense-header select {
+  flex: 3;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.expense-header input {
+  width: 100px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .expense-header input {
+    width: 80px;
+  }
+}
+
+.remove-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-color: #ff6b6b;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.expense-item textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.add-expense-btn {
+  align-self: flex-end;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Cierre (Closing) Section */
+.cierre-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.cierre-row:last-child {
+  border-bottom: none;
+}
+
+.cierre-row label {
+  flex: 2;
+  font-weight: bold;
+}
+
+.cierre-row input,
+.cierre-row .calculated-value {
+  width: 120px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: right;
+}
+
+.cierre-row .calculated-value {
+  background-color: #e6f7ff;
+  border: 1px solid #bde0fe;
+}
+
+@media (max-width: 768px) {
+  .cierre-row input,
+  .cierre-row .calculated-value {
+    width: 100px;
+  }
+}
+
+/* Footer Section */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background-color: #f0f0f0;
+  border-top: 1px solid #ccc;
+}
+
+.footer-left {
+  flex: 3;
+}
+
+.footer-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-row label {
+  font-weight: bold;
+}
+
+.attachments-list {
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.attachment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.custom-file-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #2196f3;
+  color: white;
+  cursor: pointer;
+  position: relative;
+}
+
+.attachment-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.submit-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 80%;
+  width: 400px;
+}
+
+.modal p {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.cancel-btn,
+.confirm-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.cancel-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.confirm-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.discrepancy-details {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  text-align: center;
+}
+
+/* Error Styles */
+.error {
+  border-color: red !important;
+  background-color: #ffebee !important;
+}
+
+input.error:focus {
+  outline-color: red;
+}
+
+.calculated-value.error {
+  color: red;
+  font-weight: bold;
+}
