@@ -79,13 +79,17 @@ function App() {
             'x-api-key':'IuXHFkVrYw7MCzWLbeGHY99BhkUuG8qf3dqudyPb'
           },
         });
-        /*
         if (!response.ok) {
+          const errorText = await response.text();
+          console.log('Error response:', errorText);
           throw new Error(`Error: ${response.status}`);
         }
-          */
         
-        const data = await response.json();
+        const responseText = await response.text();
+        console.log('Response text:', responseText);
+        
+        // Intenta parsear el texto a JSON solo si no está vacío
+        const data = responseText ? JSON.parse(responseText) : {};
         setInitialValue(data);
         
         // Si la API devuelve un objeto con una estructura diferente, ajusta esto
