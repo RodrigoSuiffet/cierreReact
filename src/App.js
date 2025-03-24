@@ -82,6 +82,9 @@ function App() {
         if (!response.ok) {
           const errorText = await response.text();
           console.log('Error response:', errorText);
+          console.log('json:', response.json);
+          console.log('status:', response.status);
+          console.log('statusText:', response.statusText);
           throw new Error(`Error: ${response.status}`);
         }
         
