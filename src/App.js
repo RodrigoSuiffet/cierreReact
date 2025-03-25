@@ -325,7 +325,7 @@ function App() {
         <div className="shift-selector">
           <label>Turno</label>
           <select value={shift} onChange={handleShiftChange}>
-            <option value="mañana">Mañana</option>
+            <option value="manana">Mañana</option>
             <option value="tarde">Tarde</option>
             <option value="noche">Noche</option>
           </select>
