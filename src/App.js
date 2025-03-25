@@ -74,30 +74,21 @@ function App() {
         // Realizar la petición GET al endpoint especificado
         const response = await fetch(`https://g9qfs3qh7k.execute-api.eu-west-3.amazonaws.com/inicial/${shift}`, {
           method: 'GET',
-          mode: "no-cors",
           headers: {
-            'x-api-key':'IuXHFkVrYw7MCzWLbeGHY99BhkUuG8qf3dqudyPb'
+            'x-api-key': 'IuXHFkVrYw7MCzWLbeGHY99BhkUuG8qf3dqudyPb'
           },
         });
+        
         if (!response.ok) {
-          const errorText = await response.text();
-          console.log('Error response:', errorText);
-          console.log('json:', response.json);
-          console.log('status:', response.status);
-          console.log('statusText:', response.statusText);
           throw new Error(`Error: ${response.status}`);
         }
         
-        const responseText = await response.text();
-        console.log('Response text:', responseText);
+        const data = await response.json();
+        console.log('Response data:', data);
         
-        // Intenta parsear el texto a JSON solo si no está vacío
-        const data = responseText ? JSON.parse(responseText) : {};
-        setInitialValue(data);
+        // Ahora la API devuelve un objeto con la propiedad "valor"
+        setInitialValue(data.valor);
         
-        // Si la API devuelve un objeto con una estructura diferente, ajusta esto
-        // Por ejemplo, si devuelve un objeto como {valor: 200}, usa:
-        // setInitialValue(data.valor);
       } catch (error) {
         console.error('Error fetching initial value:', error);
         // En caso de error, podemos establecer un valor predeterminado
