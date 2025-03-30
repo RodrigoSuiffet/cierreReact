@@ -143,8 +143,11 @@ function App() {
   };
   
   const getDiscrepancy = () => {
-    return getRecuentoTotal() - getTotal();
+    return getRecuentoTotal() - getTotal()+getPropina();
   };
+  const getPropina = () => {
+    return (parseFloat(tips) || 0);
+  }
   
   // Event handlers
   const handleShiftChange = (e) => {
