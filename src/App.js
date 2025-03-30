@@ -13,6 +13,7 @@ function App() {
   const [currentTime, setCurrentTime] = useState('');
   const [initialValue, setInitialValue] = useState(0);
   const [attachments, setAttachments] = useState([]);
+  const [attachmentFiles, setAttachmentFiles] = useState([]);
   const [expenseTypes, setExpenseTypes] = useState([]);
   
   // Recuento (Count) section state
@@ -72,11 +73,11 @@ function App() {
     const fetchInitialData = async () => {
       try {
         // Realizar la petición GET al endpoint especificado
-        const response = await fetch(`https://g9qfs3qh7k.execute-api.eu-west-3.amazonaws.com/inicial/${shift}`, {
+        const response = await fetch(`http://127.0.0.1:8080/inicial/${shift}`, {
           method: 'GET',
           headers: {
-            'x-api-key': 'IuXHFkVrYw7MCzWLbeGHY99BhkUuG8qf3dqudyPb'
-          },
+            'Content-Type': 'application/json',
+          }
         });
         
         if (!response.ok) {
@@ -187,18 +188,24 @@ function App() {
     }));
   };
   
-  const handleAddAttachment = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const newId = attachments.length > 0 ? Math.max(...attachments.map(a => a.id)) + 1 : 1;
-      setAttachments([...attachments, { id: newId, name: file.name }]);
-    }
-  };
+// Modified handleAddAttachment - now just stores files in state without uploading
+const handleAddAttachment = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const newId = attachments.length > 0 ? Math.max(...attachments.map(a => a.id)) + 1 : 1;
+    
+    // Store the file object and metadata in state
+    setAttachmentFiles([...attachmentFiles, { id: newId, file }]);
+    
+    // Update attachments state for UI display
+    setAttachments([...attachments, { id: newId, name: file.name }]);
+  }
+};
   
-  const handleRemoveAttachment = (id) => {
-    setAttachments(attachments.filter(attachment => attachment.id !== id));
-  };
-  
+const handleRemoveAttachment = (id) => {
+  setAttachments(attachments.filter(attachment => attachment.id !== id));
+  setAttachmentFiles(attachmentFiles.filter(file => file.id !== id));
+};
   const validateForm = () => {
     const newErrors = {};
     
@@ -246,51 +253,112 @@ function App() {
   
   const submitData = async () => {
     try {
-      // This would be an actual API call in a real app
-      // const response = await fetch('/api/submit', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     shift,
-      //     date: currentDate,
-      //     time: currentTime,
-      //     recuento: {
-      //       mode: countMode,
-      //       total: getRecuentoTotal(),
-      //       details: countMode === 'separado' ? coinCounts : null
-      //     },
-      //     gastos: {
-      //       withdrawal,
-      //       expenses
-      //     },
-      //     cierre: {
-      //       cardTotal,
-      //       cardClose,
-      //       tips,
-      //       cardDiscrepancy: getCardDiscrepancy(),
-      //       initialValue,
-      //       sales,
-      //       cashIncome,
-      //       totalExpenses: getTotalExpenses(),
-      //       total: getTotal(),
-      //       recuento: getRecuentoTotal(),
-      //       discrepancy: getDiscrepancy()
-      //     },
-      //     attachments: attachments.map(a => a.id)
-      //   }),
-      // });
+      // Mostramos un estado de carga si es necesario
+      //N setIsSubmitting(true);
       
-      // const data = await response.json();
-      // if (data.success) {
+      // Primero, validamos el formulario
+      if (!validateForm()) {
+        setShowErrorMessage(true);
+        return;
+      }
+      
+      // Verificamos si hay discrepancias
+      const cardDiscrepancy = getCardDiscrepancy();
+      const cashDiscrepancy = getDiscrepancy();
+      
+      if (cardDiscrepancy !== 0 || cashDiscrepancy !== 0) {
+        setShowDiscrepancyWarning(true);
+        return;
+      }
+      
+      // Primero enviamos los datos del formulario sin los archivos
+      const response = await fetch('http://127.0.0.1:8080/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          shift,
+          total: getRecuentoTotal(),
+          gastos: {
+            withdrawal,
+            expenses
+          },
+          cardTotal,
+          cardClose,
+          tips,
+          cardDiscrepancy: getCardDiscrepancy(),
+          initialValue,
+          sales,
+          cashIncome,
+          totalExpenses: getTotalExpenses(),
+          recuento: getRecuentoTotal(),
+          discrepancy: getDiscrepancy()
+        }),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error enviando el formulario: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        // Obtenemos el ID de la caja recién creada
+        const cajaId = data.id;
+        
+        // Si hay archivos para subir, los enviamos con el ID de la caja
+        let uploadSuccess = true;
+        
+        if (attachmentFiles.length > 0) {
+          // Creamos un FormData para los archivos
+          const formData = new FormData();
+          
+          // Añadimos todos los archivos al FormData
+          attachmentFiles.forEach(item => {
+            formData.append('files', item.file);
+          });
+          
+          // Subimos todos los archivos asociados a la caja
+          const uploadResponse = await fetch(`http://127.0.0.1:8080/api/upload-multiple/${cajaId}`, {
+            method: 'POST',
+            body: formData,
+          });
+          
+          if (!uploadResponse.ok) {
+            console.error(`Error subiendo archivos: ${uploadResponse.status}`);
+            uploadSuccess = false;
+          } else {
+            const uploadData = await uploadResponse.json();
+            if (!uploadData.success) {
+              console.error('Error en la respuesta de subida:', uploadData.error);
+              uploadSuccess = false;
+            }
+          }
+        }
+        
+        // Limpiamos los archivos del estado después de una subida exitosa
+        setAttachmentFiles([]);
+        
+        // Mostramos el mensaje de éxito
         setShowSuccessMessage(true);
-      // } else {
-      //   throw new Error('Failed to submit data');
-      // }
+        
+        // Si hubo algún problema con los archivos pero la caja se creó correctamente,
+        // podríamos mostrar un mensaje específico
+        if (!uploadSuccess) {
+          console.warn('La caja se registró correctamente, pero hubo problemas con la subida de archivos.');
+          // Aquí podrías mostrar un mensaje al usuario
+        }
+        
+      } else {
+        throw new Error(data.error || 'Error al enviar los datos');
+      }
       
     } catch (error) {
-      console.error('Error submitting data:', error);
+      console.error('Error en el proceso de envío:', error);
+      setShowErrorMessage(true);
+    } finally {
+      // setIsSubmitting(false);
     }
   };
   
